@@ -7,6 +7,7 @@ import Blogs from '../views/Blogs'
 import MyBlogs from '../views/MyBlogs'
 import CreateBlog from '../views/CreateBlog'
 import SingleBlog from '../views/SingleBlog'
+import EditBlog from '../views/EditBlog'
 
 export default function Router() {
 
@@ -23,6 +24,7 @@ export default function Router() {
        <Route path='/myblogs' element={<MyBlogs/>}></Route>
        <Route path='/myblogs/create' element={<CreateBlog/>}></Route>
        <Route path='/blogs/:id' element={<SingleBlog/>}></Route>
+       <Route path='/myblogs/edit/:id' element={<EditBlog/>}></Route>
     </Routes>
   )
 }

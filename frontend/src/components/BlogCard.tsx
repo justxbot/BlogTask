@@ -39,7 +39,7 @@ const handleRemove = async()=>{
             {mode=='actions'?
             <>
             <FaRegTrashCan onClick={handleRemove} className='text-red-600 cursor-pointer'/>
-            <FaEdit className='text-blue-800 cursor-pointer'/>
+            <Link  to={`/myblogs/edit/${blog._id}`}><FaEdit className='text-blue-800 cursor-pointer'/></Link>
             </>
             :
             <Link to={`/blogs/${blog._id}`} className='text-[20px] text-white px-[25px] py-[5px] rounded-full bg-blue-500'>Read</Link>

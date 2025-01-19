@@ -27,6 +27,7 @@ app.use(cors({
     credentials:true
 }))
 app.use('/media', express.static('media'));
+
 //connecting to mongodb database
 connectToDb()
 
@@ -215,6 +216,93 @@ app.post('/blog', isAuth, upload.any(), async (req, res) => {
         console.error('Error creating blog:', error);
         res.status(500).json({ message: "Something went wrong, please try again later" });
     }
+});
+
+//edit blog
+app.post('/blog/edit', isAuth, upload.any(), async(req, res) => {
+    try {
+        const blogId = req.body._id;
+        const { title } = req.body;
+        const data = JSON.parse(req.body.data);
+        
+        // Find the blog first
+        const theBlog = await Blog.findOne({ _id: blogId, userId: req.user._id });
+        if (!theBlog) {
+            return res.status(404).json({ message: "Blog not found" });
+        }
+
+        // Process uploaded files
+        const files = req.files;
+        const fileMap = {};
+
+        // Remove old media files only if new ones are uploaded
+        if (files.length > 0) {
+            // Remove old featured image if new one is uploaded
+            if (req.files.some(file => file.fieldname === 'featuredImage') && theBlog.featuredImage) {
+                fs.unlink('.' + theBlog.featuredImage, (err) => {
+                    if (err) console.error(`Error deleting featured image: ${err.message}`);
+                });
+            }
+
+            // Remove old content images if they're being replaced
+            for (const content of theBlog.data) {
+                if (content.type === 'img') {
+                    fs.unlink('.' + content.content, (err) => {
+                        if (err) console.error(`Error deleting file: ${err.message}`);
+                    });
+                }
+            }
+        }
+
+        // Create a map of temporary keys to final URLs
+        files.forEach(file => {
+            if (file.fieldname === 'featuredImage') {
+                fileMap.featuredImage = `/media/${file.filename}`;
+            } else {
+                fileMap[file.fieldname] = `/media/${file.filename}`;
+            }
+        });
+        
+        // Replace temporary keys with actual URLs in the data
+        const processedData = data.map(item => {
+            if (item.type === 'img') {
+                // If content is a key in fileMap, use the new URL, otherwise keep existing URL
+                return {
+                    ...item,
+                    content: fileMap[item.content] || item.content
+                };
+            }
+            return item;
+        });
+
+        // Update the blog
+        const updateData = {
+            title,
+            data: processedData,
+        };
+
+        // Handle featuredImage update
+        if (req.body.featuredImage === 'null') {
+            updateData.featuredImage = null;  // Explicitly set to null if no image
+        } else if (fileMap.featuredImage) {
+            updateData.featuredImage = fileMap.featuredImage;  // Set new image if uploaded
+        }
+
+        const blog = await Blog.findOneAndUpdate(
+            { _id: blogId, userId: req.user._id },
+            updateData,
+            { new: true }
+        );
+        
+        if (!blog) {
+            return res.status(404).json({ message: "Blog not found or unauthorized" });
+        }
+        
+        res.status(200).json({ message: "Blog edited successfully" });
+    } catch (error) {
+        console.error('Error updating blog:', error);
+        res.status(500).json({ message: "Something went wrong, please try again later" });
+    } 
 });
 //remove blog
 app.post('/blog/delete',isAuth,async(req,res)=>{

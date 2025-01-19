@@ -46,7 +46,7 @@ const useStore = create((set)=>({
             set({blogsLoading:false})
         }
     },
-        getBlogById: async(payload:string)=>{
+    getBlogById: async(payload:string)=>{
         set({blogsLoading:true})
         try{
             const res = await axios.get(endpointUrl+'/blogs/'+payload,{withCredentials:true})
@@ -119,6 +119,17 @@ const useStore = create((set)=>({
             const res = await axios.post(endpointUrl+'/blog',payload,{withCredentials:true})
             if(res){
                 toast.success(res.data.message)
+            }
+        }
+        catch(err){
+            toast.error(err.response.data.message)
+        }
+    },
+    updateBlog: async(payload:object)=>{
+        try{
+            const res = await axios.post(endpointUrl+'/blog/edit',payload,{withCredentials:true})
+            if(res){
+                console.log(res);
             }
         }
         catch(err){
