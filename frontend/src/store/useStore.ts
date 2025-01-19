@@ -1,4 +1,5 @@
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { create } from "zustand";
 
@@ -11,13 +12,13 @@ interface Blog{
 }
 
 const useStore = create((set)=>({
-
+    
     blogs: [],
     userBlogs:[],
     user:null,
     blogsLoading:false,
     userLoading:false,
-
+    userCheckLoading:false,
     getBlogs: async()=>{
         set({blogsLoading:true})
         try{
@@ -82,6 +83,7 @@ const useStore = create((set)=>({
             const res = await axios.post(endpointUrl+'/login',payload,{withCredentials:true})
             if(res){
                 set({user:res.data.user})
+                window.location.href="/"
             }
         }catch(err){
             toast.error(err.response.data.message)
@@ -95,7 +97,7 @@ const useStore = create((set)=>({
             const res = await axios.post(endpointUrl+'/logout',{},{withCredentials:true})
             if(res){
                 set({user:null})
-                window.location.href='/login'
+                window.location.href="/login"
             }
         }
         catch(err){
@@ -103,15 +105,19 @@ const useStore = create((set)=>({
         }
     },
     checkUser: async()=>{
+        set({userCheckLoading:true})
         try{
             const res = await axios.get(endpointUrl+"/checkUser",{withCredentials:true})
             console.log("status => ", res.data.status);
             if(res.data.status){
                 set({user:res.data.user})
             }
+            return res.data.status
         }
         catch(err){
             console.log(err);
+        }finally{
+            set({userCheckLoading:false})
         }
     },
     createBlog: async(payload:object)=>{

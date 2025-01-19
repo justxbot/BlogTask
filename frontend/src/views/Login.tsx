@@ -3,7 +3,7 @@ import loginIllustration from '../assets/loginIllustration.svg'
 import { toast } from 'react-toastify'
 import { isEmail } from '../utilities/isEmail'
 import useStore from '../store/useStore'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 
 export default function Login() {
@@ -15,7 +15,7 @@ export default function Login() {
     const authenticate = useStore((state:any)=>state.authenticate)
 
     const [formData, setFormData] = useState<formData>({email:'',pwd:''})
-    const handleSubmit = async(e: FormEvent)=>{
+    const handleSubmit = async(e:React.FormEvent)=>{
         e.preventDefault()
         //Extra validation for formData
         if(formData.email==''){

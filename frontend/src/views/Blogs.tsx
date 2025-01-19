@@ -1,8 +1,9 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import Navbar from '../components/Navbar'
 import homeIllustration from '../assets/homeIllustration.svg'
 import useStore from '../store/useStore'
 import BlogCard from '../components/BlogCard'
+import { useNavigate } from 'react-router-dom'
 export default function Blogs() {
 
     const getBlogs = useStore((state:any)=>state.getBlogs)
