@@ -5,7 +5,7 @@ const blogSchema = mongoose.Schema({
         type:String,
         required:true
     },
-    message:{
+    data:{
         type:Array,
         required:true
     },
