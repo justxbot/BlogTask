@@ -96,8 +96,8 @@ app.post('/login',async(req,res)=>{
         const token = jwt.sign(user.toObject(), JWT_KEY)
         res.cookie('authToken',token,{
             httpOnly:true, //prevent client side to access the cookie
-            secure:false, //false for http now but should be true when over https
-            sameSite:'strict',//to protect against CSRF attacks
+            secure:true, //false for http now but should be true when over https
+            sameSite:'none',//to protect against CSRF attacks
         })
         return res.status(200).json({message:'logged in successfully', user:user})
     }
