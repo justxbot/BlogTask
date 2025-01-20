@@ -1,4 +1,4 @@
-import React, { FormEvent, useState } from "react";
+import { FormEvent, useState } from "react";
 import { toast } from "react-toastify";
 import { isEmail } from "../utilities/isEmail";
 import { Link } from "react-router-dom";

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import  { useEffect } from 'react'
 import Navbar from '../components/Navbar'
 import homeIllustration from '../assets/homeIllustration.svg'
 import useStore from '../store/useStore'

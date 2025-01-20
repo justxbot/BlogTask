@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import loginIllustration from '../assets/loginIllustration.svg'
 import { toast } from 'react-toastify'
 import { isEmail } from '../utilities/isEmail'
 import useStore from '../store/useStore'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 
 export default function Login() {

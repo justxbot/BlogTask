@@ -1,4 +1,4 @@
-import React from 'react'
+
 import { FaEdit } from 'react-icons/fa'
 import { FaRegTrashCan } from 'react-icons/fa6'
 import useStore from '../store/useStore'
