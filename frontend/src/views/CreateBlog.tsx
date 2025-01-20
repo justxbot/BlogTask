@@ -78,7 +78,7 @@ export default function CreateBlog() {
         }))
     }
     const removeContent = (index:number)=>{
-        setBlogContent(blogContent.filter((elm,i)=>index!==i))
+        setBlogContent(blogContent.filter((_,i)=>index!==i))
     }
     const handleModalExit = (e:React.MouseEvent<HTMLDivElement, MouseEvent>)=>{
         if(e.target==e.currentTarget){
