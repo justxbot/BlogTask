@@ -9,8 +9,8 @@ import { Link } from 'react-router-dom'
 export default function Login() {
 
     interface formData{
-        email:String,
-        pwd:String
+        email:string,
+        pwd:string
     }
     const authenticate = useStore((state:any)=>state.authenticate)
 
