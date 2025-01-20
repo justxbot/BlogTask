@@ -19,12 +19,13 @@ const Blog = require('./models/Blog.js')
 //enviroment variables
 const PORT = process.env.PORT
 const JWT_KEY = process.env.JWT_KEY
+const CLIENT_DOMAIN = process.env.CLIENT_DOMAIN
 
 //applying Middlewares
 app.use(cookieParser())
 app.use(bodyParser.json())
 app.use(cors({
-    origin:'http://localhost:5173',
+    origin:CLIENT_DOMAIN,
     credentials:true
 }))
 app.use('/media', express.static('media'));
