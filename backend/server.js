@@ -125,7 +125,11 @@ app.get('/checkUser',(req,res)=>{
 })
 //user logout
 app.post('/logout',(req,res)=>{
-    res.clearCookie('authToken')
+    res.clearCookie('authToken',{
+        httpOnly: true,
+        secure: true,
+        sameSite: 'none'
+    })
     res.status(200).json({message:'Logged out successfully'})
 })
 
