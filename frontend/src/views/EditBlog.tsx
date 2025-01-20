@@ -6,7 +6,8 @@ import { FaCheck, FaEdit, FaTrash } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import { IoClose } from "react-icons/io5";
 import useStore from '../store/useStore';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import BlogContentPlaceholder from '../components/BlogContentPlaceholder';
 
 export default function EditBlog() {
     const endpointUrl:string = import.meta.env.VITE_ENDPOINT
@@ -20,6 +21,7 @@ export default function EditBlog() {
         blob:File | null,
         url:string | null
     }
+    const navigate = useNavigate()
     const [title, setTitle] = useState<string>('')
     const [featuredImg,setFeaturedImg] = useState<featuredImage>({blob:null,url:null})
     const [isCreating,setIsCreating] = useState<Boolean>(false)
@@ -31,12 +33,16 @@ export default function EditBlog() {
 
     const blogId:string|undefined = useParams().id
     const getBlogById = useStore((state:any)=>state.getBlogById)
+    const blogsLoading = useStore((state:any)=>state.blogsLoading)
     const fetchAndSet = async ()=>{
         const blog = await getBlogById(blogId)
         if(blog){
             setTitle(blog.title)
             setFeaturedImg({blob:null,url:blog.featuredImage})
             setBlogContent(blog.data)
+        }
+        else{
+            navigate('/404')
         }
     }
 
@@ -188,22 +194,24 @@ export default function EditBlog() {
     
         // Send formData instead of JSON
         await updateBlog(formData);
-        setFeaturedImg({blob:null, url:null});
-        setBlogContent([]);
-        setTitle('');
+        navigate('/myblogs')
     };
   return (
     <AppLayout>
-        <div className='w-full flex  min-h-screen pt-[20vh] pb-[10vh] px-[10%]  gap-[25px] '>
-           <div className=' flex w-[80%] flex-col gap-[50px]'>
-                <input type='text' placeholder='Blog Title' onChange={(e)=>setTitle(e.target.value)} defaultValue={title} className='w-full min-h-[50px] outline-none rounded-[15px] text-[30px] border-2 border-blue-500 px-[25px] py-[15px]'/>
+        <div className='w-full flex  min-h-screen pt-[20vh] pb-[10vh] px-[10%]  gap-[25px] md:flex-row flex-col '>
+        <div className=' flex md:w-[80%] w-full flex-col gap-[50px]'>
+                <input type='text' defaultValue={title} placeholder='Blog Title' onChange={(e)=>setTitle(e.target.value)} className='w-full min-h-[50px] outline-none rounded-[15px] text-[30px] border-2 border-blue-500 px-[25px] py-[15px]'/>
                 <div>
-                    {blogContent.map((elm,i)=>{
+                    {
+                    blogsLoading?
+                    <BlogContentPlaceholder/>
+                    :
+                    blogContent.map((elm,i)=>{
                         return(
                         elm.isEditing?
                         <div key={i} className='w-full  flex justify-between group  p-[25px] '>
                             <textarea onChange={(e)=>setParagraphEditingContent(e.target.value)}  className='w-full outline-none p-[25px]' placeholder='Paragraph...'>{elm.content}</textarea>
-                            <div className='flex text-[20px] gap-[10px] items-center  opacity-0 group-hover:opacity-100 transition-all w-[5%]'>
+                            <div className='flex text-[20px] gap-[10px] items-center opacity-100  xl:opacity-0 xl:group-hover:opacity-100 transition-all'>
                                 <FaCheck onClick={()=>confirmParagraphUpdate(i)} className='text-blue-500 cursor-pointer'/>
                                 <IoClose onClick={()=>cancelParagraphUpdate(i)} className='text-red-500 cursor-pointer text-[30px]'/>
                             </div>
@@ -212,7 +220,7 @@ export default function EditBlog() {
                         elm.type=="text"?
                         <div key={i} className='w-full  flex justify-between group  p-[25px] '>
                             <div>{elm.content}</div>
-                            <div className='flex text-[20px] gap-[10px] items-center opacity-0 group-hover:opacity-100 transition-all w-[5%]'>
+                            <div className='flex text-[20px] gap-[10px] items-center opacity-100  xl:opacity-0 xl:group-hover:opacity-100 transition-all '>
                                 <FaEdit onClick={()=>updatingParagraph(i)} className='text-blue-500 cursor-pointer'/>
                                 <FaTrash onClick={()=>removeContent(i)} className='text-red-500 cursor-pointer'/>
                             </div>
@@ -220,7 +228,7 @@ export default function EditBlog() {
                         :
                         <div key={i} className='w-full relative flex justify-between group  '>
                             <img src={elm.blob?elm.content:endpointUrl+elm.content} className='w-full ' />
-                            <div className='bg-white rounded-[15px] p-[10px] absolute right-0 top-0 translate-x-[-25px] translate-y-[25px] opacity-0 group-hover:opacity-100 transition-all'>
+                            <div className='bg-white rounded-[15px] p-[10px] absolute right-0 top-0 translate-x-[-25px] translate-y-[25px] opacity-100  xl:opacity-0 xl:group-hover:opacity-100 transition-all'>
                                 <FaTrash onClick={()=>removeContent(i)} className='text-red-500 cursor-pointer   '/>
                             </div>
                         </div>
@@ -230,7 +238,7 @@ export default function EditBlog() {
                 {isCreating?
                     <div className='w-full  flex justify-between group   '>
                     <textarea onChange={(e)=>setParagraphContent(e.target.value)} className='w-full outline-none p-[25px]' placeholder='Paragraph...'></textarea>
-                    <div className='flex text-[20px] gap-[10px] opacity-0 group-hover:opacity-100 transition-all items-center   w-[5%]'>
+                    <div className='flex text-[20px] gap-[10px] opacity-100  xl:opacity-0 xl:group-hover:opacity-100 transition-all items-center  '>
                         <FaCheck onClick={addParagraph} className='text-blue-500 cursor-pointer'/>
                         <IoClose onClick={cancelParagraph} className='text-red-500 cursor-pointer text-[30px]'/>
                     </div>
@@ -250,18 +258,20 @@ export default function EditBlog() {
                 
 
            </div>
-           <div className='h-fit  w-[20%]  '>
+           <div className='h-fit  md:w-[20%] w-full  '>
                 <div className='bg-gray-100 w-full min-h-20 p-[25px] flex flex-col gap-[25px] rounded-[15px]'>
-                    <h3 className='text-[26px] font-semibold'>Featured Image</h3>
-                    {featuredImg.url &&
+                    <h3 className='xl:text-[26px] text-[20px] font-semibold'>Featured Image</h3>
+                    {featuredImg.url?
                         <div className='w-full h-[200px] bg-red-200 rounded-[15px] bg-no-repeat bg-center bg-cover' style={{backgroundImage:`url(${featuredImg.blob?featuredImg.url:endpointUrl+featuredImg.url})`}}>
 
                         </div>
+                        :
+                        <input onChange={(e)=>handleFeaturedImg(e)}  type="file" accept='image/*' />
                     }
-                    {!featuredImg.url && <input onChange={(e)=>handleFeaturedImg(e)}  type="file" accept='image/*' />}
-                    <div className='flex gap-[15px]'>
-                        <div onClick={submitBlog} className='text-white bg-blue-500 w-fit px-[25px] py-[5px] rounded-full cursor-pointer'>Publish</div>
-                        {featuredImg.url && <div onClick={cancelFeaturedImg} className='text-white bg-red-500 w-fit px-[25px] py-[5px] rounded-full cursor-pointer'>Remove</div>}
+
+                    <div className='flex gap-[15px] flex-wrap items-center justify-center'>
+                        <div onClick={submitBlog} className='text-white bg-blue-500 w-fit px-[25px] py-[5px] rounded-full cursor-pointer transition-all hover:tracking-widest'>Publish</div>
+                        {featuredImg.url && <div onClick={cancelFeaturedImg} className='text-white bg-red-500 w-fit px-[25px] py-[5px] rounded-full cursor-pointer transition-all hover:tracking-widest'>Remove</div>}
                     </div>
                 </div>
            </div>

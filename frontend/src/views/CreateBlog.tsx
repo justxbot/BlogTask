@@ -6,6 +6,7 @@ import { FaCheck, FaEdit, FaTrash } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import { IoClose } from "react-icons/io5";
 import useStore from '../store/useStore';
+import { featuredImg } from '../types';
 
 export default function CreateBlog() {
 
@@ -15,8 +16,8 @@ export default function CreateBlog() {
         isEditing?:boolean,
         blob?:File
     }
-    const [title, setTitle] = useState<String>('')
-    const [featuredImg,setFeaturedImg] = useState<Object>({blob:null,url:null})
+    const [title, setTitle] = useState<string>('')
+    const [featuredImg,setFeaturedImg] = useState<featuredImg>({blob:null,url:null})
     const [isCreating,setIsCreating] = useState<Boolean>(false)
     const [blogContent,setBlogContent]= useState<Array<content>>([])
     const [isModal,setIsModal] = useState<Boolean>(false)
@@ -79,10 +80,10 @@ export default function CreateBlog() {
     const removeContent = (index:number)=>{
         setBlogContent(blogContent.filter((elm,i)=>index!==i))
     }
-    const handleModalExit = (e:Event)=>{
+    const handleModalExit = (e:React.MouseEvent<HTMLDivElement, MouseEvent>)=>{
         if(e.target==e.currentTarget){
             setIsModal(false)
-            setImgContent("")
+            setImgContent(undefined)
         }
     }
     const addImg = ()=>{
@@ -173,8 +174,8 @@ if (featuredImg && featuredImg.url) {
 };
   return (
     <AppLayout>
-        <div className='w-full flex  min-h-screen pt-[20vh] pb-[10vh] px-[10%]  gap-[25px] '>
-           <div className=' flex w-[80%] flex-col gap-[50px]'>
+        <div className='w-full flex  min-h-screen pt-[20vh] pb-[10vh] px-[10%]  gap-[25px] md:flex-row flex-col '>
+           <div className=' flex md:w-[80%] w-full flex-col gap-[50px]'>
                 <input type='text' placeholder='Blog Title' onChange={(e)=>setTitle(e.target.value)} className='w-full min-h-[50px] outline-none rounded-[15px] text-[30px] border-2 border-blue-500 px-[25px] py-[15px]'/>
                 <div>
                     {blogContent.map((elm,i)=>{
@@ -182,7 +183,7 @@ if (featuredImg && featuredImg.url) {
                         elm.isEditing?
                         <div key={i} className='w-full  flex justify-between group  p-[25px] '>
                             <textarea onChange={(e)=>setParagraphEditingContent(e.target.value)}  className='w-full outline-none p-[25px]' placeholder='Paragraph...'>{elm.content}</textarea>
-                            <div className='flex text-[20px] gap-[10px] items-center  opacity-0 group-hover:opacity-100 transition-all w-[5%]'>
+                            <div className='flex text-[20px] gap-[10px] items-center opacity-100  xl:opacity-0 xl:group-hover:opacity-100 transition-all'>
                                 <FaCheck onClick={()=>confirmParagraphUpdate(i)} className='text-blue-500 cursor-pointer'/>
                                 <IoClose onClick={()=>cancelParagraphUpdate(i)} className='text-red-500 cursor-pointer text-[30px]'/>
                             </div>
@@ -191,7 +192,7 @@ if (featuredImg && featuredImg.url) {
                         elm.type=="text"?
                         <div key={i} className='w-full  flex justify-between group  p-[25px] '>
                             <div>{elm.content}</div>
-                            <div className='flex text-[20px] gap-[10px] items-center opacity-0 group-hover:opacity-100 transition-all w-[5%]'>
+                            <div className='flex text-[20px] gap-[10px] items-center opacity-100  xl:opacity-0 xl:group-hover:opacity-100 transition-all '>
                                 <FaEdit onClick={()=>updatingParagraph(i)} className='text-blue-500 cursor-pointer'/>
                                 <FaTrash onClick={()=>removeContent(i)} className='text-red-500 cursor-pointer'/>
                             </div>
@@ -199,7 +200,7 @@ if (featuredImg && featuredImg.url) {
                         :
                         <div key={i} className='w-full relative flex justify-between group  '>
                             <img src={elm.content} className='w-full ' />
-                            <div className='bg-white rounded-[15px] p-[10px] absolute right-0 top-0 translate-x-[-25px] translate-y-[25px] opacity-0 group-hover:opacity-100 transition-all'>
+                            <div className='bg-white rounded-[15px] p-[10px] absolute right-0 top-0 translate-x-[-25px] translate-y-[25px] opacity-100  xl:opacity-0 xl:group-hover:opacity-100 transition-all'>
                                 <FaTrash onClick={()=>removeContent(i)} className='text-red-500 cursor-pointer   '/>
                             </div>
                         </div>
@@ -209,7 +210,7 @@ if (featuredImg && featuredImg.url) {
                 {isCreating?
                     <div className='w-full  flex justify-between group   '>
                     <textarea onChange={(e)=>setParagraphContent(e.target.value)} className='w-full outline-none p-[25px]' placeholder='Paragraph...'></textarea>
-                    <div className='flex text-[20px] gap-[10px] opacity-0 group-hover:opacity-100 transition-all items-center   w-[5%]'>
+                    <div className='flex text-[20px] gap-[10px] opacity-100  xl:opacity-0 xl:group-hover:opacity-100 transition-all items-center  '>
                         <FaCheck onClick={addParagraph} className='text-blue-500 cursor-pointer'/>
                         <IoClose onClick={cancelParagraph} className='text-red-500 cursor-pointer text-[30px]'/>
                     </div>
@@ -229,18 +230,20 @@ if (featuredImg && featuredImg.url) {
                 
 
            </div>
-           <div className='h-fit  w-[20%]  '>
+           <div className='h-fit  md:w-[20%] w-full  '>
                 <div className='bg-gray-100 w-full min-h-20 p-[25px] flex flex-col gap-[25px] rounded-[15px]'>
-                    <h3 className='text-[26px] font-semibold'>Featured Image</h3>
-                    {featuredImg.url &&
+                    <h3 className='xl:text-[26px] text-[20px] font-semibold'>Featured Image</h3>
+                    {featuredImg.url?
                         <div className='w-full h-[200px] bg-red-200 rounded-[15px] bg-no-repeat bg-center bg-cover' style={{backgroundImage:`url(${featuredImg.url})`}}>
 
                         </div>
+                        :
+                        <input onChange={(e)=>handleFeaturedImg(e)}  type="file" accept='image/*' />
                     }
-                    <input onChange={(e)=>handleFeaturedImg(e)}  type="file" accept='image/*' />
-                    <div className='flex gap-[15px]'>
-                        <div onClick={submitBlog} className='text-white bg-blue-500 w-fit px-[25px] py-[5px] rounded-full cursor-pointer'>Publish</div>
-                        {featuredImg.url && <div onClick={cancelFeaturedImg} className='text-white bg-red-500 w-fit px-[25px] py-[5px] rounded-full cursor-pointer'>Remove</div>}
+
+                    <div className='flex gap-[15px] flex-wrap items-center justify-center'>
+                        <div onClick={submitBlog} className='text-white bg-blue-500 w-fit px-[25px] py-[5px] rounded-full cursor-pointer transition-all hover:tracking-widest'>Publish</div>
+                        {featuredImg.url && <div onClick={cancelFeaturedImg} className='text-white bg-red-500 w-fit px-[25px] py-[5px] rounded-full cursor-pointer transition-all hover:tracking-widest'>Remove</div>}
                     </div>
                 </div>
            </div>
@@ -249,7 +252,11 @@ if (featuredImg && featuredImg.url) {
         {isModal && 
         <div onClick={(e)=>handleModalExit(e)} className='w-full h-full fixed backdrop-blur-[8px] left-0 top-0 flex items-center justify-center bg-[rgba(0,0,0,.3)] z-[99]'>
             <div className='p-[25px] flex flex-col gap-[25px] bg-white rounded-[15px] shadow-[0px_0px_50px_rgba(0,0,0,.1)]'>
-                <input onChange={(e)=>setImgContent(e.target.files[0])} accept='image/*' type="file" />
+                <input onChange={(e)=>{
+                    if(e.target.files)
+                    setImgContent(e.target.files[0])
+                }
+                    } accept='image/*' type="file" />
                 {imgContent &&
                 <div className='w-full flex flex-row-reverse gap-[15px]'>
                     <div onClick={addImg} className='text-white bg-blue-500 w-fit px-[25px] py-[5px] rounded-full cursor-pointer'>Add</div>

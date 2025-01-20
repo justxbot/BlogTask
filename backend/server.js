@@ -113,7 +113,9 @@ app.get('/checkUser',(req,res)=>{
     }
     try{
         const user = jwt.verify(token,JWT_KEY)
-        return res.status(200).json({status:true, user:user})
+        if(user){
+            return res.status(200).json({status:true, user:user})
+        }
     }
     catch(err){
         return res.status(403).json({message:'Invalid login information'})
@@ -128,8 +130,13 @@ app.post('/logout',(req,res)=>{
 //get all blogs
 app.get('/blogs',isAuth, async(req,res)=>{
     try{
-        const blogs = await Blog.find()
-        return res.status(200).json({message:"blogs successfully loaded",blogs:blogs})
+        const blogs = await Blog.find().populate({
+            path: 'userId', 
+            select: 'fname lname',
+          });
+        if(blogs){
+            return res.status(200).json({message:"blogs successfully loaded",blogs:blogs})
+        }
     }
     catch(err){
         return res.status(500).json({message:"something went wrong, try again later",error:err})
@@ -140,7 +147,10 @@ app.get('/blogs',isAuth, async(req,res)=>{
 app.get('/blogs/:id',isAuth,async(req,res)=>{
     const blogId = req.params.id
     try{
-        const blog = await Blog.findOne({_id:blogId})
+        const blog = await Blog.findOne({_id:blogId}).populate({
+            path: 'userId', 
+            select: 'fname lname',
+          });
         if(!blog){
             return res.status(404).json({message:"No blog was found"})
         }

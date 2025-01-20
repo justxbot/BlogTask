@@ -14,8 +14,9 @@ const blogSchema = mongoose.Schema({
         required:false,
     },
     userId:{
-        type:String,
-        required:true
+        type: mongoose.Schema.Types.ObjectId, // Reference to the User model
+        ref: 'User', // Model name
+        required: true
     },
     created_at:{
         type:Date,

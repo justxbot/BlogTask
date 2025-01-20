@@ -1,15 +1,9 @@
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { create } from "zustand";
 
 const endpointUrl:string = import.meta.env.VITE_ENDPOINT
-interface Blog{
-    title:string,
-    messages:Array<Object>,
-    featuredImqge:string | null
 
-}
 
 const useStore = create((set)=>({
     
@@ -26,8 +20,8 @@ const useStore = create((set)=>({
             if(res){
                 set({blogs:res.data.blogs})
             }
-        }catch(err){
-            console.log(err);
+        }catch(err:any){
+                        toast.error(err.response.data.message)
         }
         finally{
             set({blogsLoading:false})
@@ -40,8 +34,8 @@ const useStore = create((set)=>({
             if(res){
                 set({userBlogs:res.data.userBlogs})
             }
-        }catch(err){
-            console.log(err);
+        }catch(err:any){
+                        toast.error(err.response.data.message)
         }
         finally{
             set({blogsLoading:false})
@@ -57,8 +51,8 @@ const useStore = create((set)=>({
             else{
                 return false
             }
-        }catch(err){
-            console.log(err);
+        }catch(err:any){
+                        toast.error(err.response.data.message)
         }
         finally{
             set({blogsLoading:false})
@@ -72,7 +66,7 @@ const useStore = create((set)=>({
             if(res){
                 toast.success(res.data.message)
             }
-        }catch(err){
+        }catch(err:any){
 
             toast.error(err.response.data.message)
         }
@@ -85,7 +79,7 @@ const useStore = create((set)=>({
                 set({user:res.data.user})
                 window.location.href="/"
             }
-        }catch(err){
+        }catch(err:any){
             toast.error(err.response.data.message)
         }
         finally{
@@ -100,7 +94,7 @@ const useStore = create((set)=>({
                 window.location.href="/login"
             }
         }
-        catch(err){
+        catch(err:any){
             toast.error(err.response.data.message)
         }
     },
@@ -114,8 +108,8 @@ const useStore = create((set)=>({
             }
             return res.data.status
         }
-        catch(err){
-            console.log(err);
+        catch(err:any){
+                        toast.error(err.response.data.message)
         }finally{
             set({userCheckLoading:false})
         }
@@ -127,7 +121,7 @@ const useStore = create((set)=>({
                 toast.success(res.data.message)
             }
         }
-        catch(err){
+        catch(err:any){
             toast.error(err.response.data.message)
         }
     },
@@ -138,7 +132,7 @@ const useStore = create((set)=>({
                 console.log(res);
             }
         }
-        catch(err){
+        catch(err:any){
             toast.error(err.response.data.message)
         }
     },
@@ -149,7 +143,7 @@ const useStore = create((set)=>({
                 toast.success(res.data.message)
             }
         }
-        catch(err){
+        catch(err:any){
             toast.error(err.response.data.message)
         }
     }

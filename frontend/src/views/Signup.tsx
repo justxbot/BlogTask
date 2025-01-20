@@ -46,22 +46,22 @@ export default function Signup() {
         </Link>
       </div>
 
-      <div className="h-full w-full flex justify-center items-center min-h-screen bg-gradient-to-br from-blue-400 to-blue-500">
+      <div className="h-full w-full hidden md:flex justify-center items-center min-h-screen bg-gradient-to-br from-blue-400 to-blue-500">
         <img src={signupIllustration} />
       </div>
       <div className="w-full flex justify-center items-center">
-        <div className="w-[80%] flex flex-col gap-[100px]">
+        <div className="w-[80%] flex flex-col xl:gap-[100px] md:gap-[50px] gap-[50px]">
           <div>
-            <h1 className="text-[50px] font-bold">Become a member to BlogTask</h1>
-            <p className="text-[20px]">Please signup using the form below.</p>
+            <h1 className="xl:text-[50px] md:text-[30px] text-[30px] font-bold">Become a member to BlogTask</h1>
+            <p className="xl:text-[20px] md:text-[16px]">Please signup using the form below.</p>
           </div>
 
           <form
             onSubmit={(e) => handleSubmit(e)}
-            className="w-full flex flex-col gap-[25px]"
+            className="w-full flex flex-col xl:gap-[25px] md:gap-[15px] gap-[15px]"
           >
-            <div className="w-full flex flex-col gap-[15px]">
-              <p className="text-[20px] font-bold">First name:</p>
+            <div className="w-full flex flex-col xl:gap-[15px] gap-[5px] ">
+              <p className="xl:text-[20px] md:text-[16px]  font-bold">First name:</p>
               <input
                 onChange={(e) =>
                   setFormData({ ...formData, fname: e.target.value })
@@ -71,8 +71,8 @@ export default function Signup() {
                 className="w-full border-2 rounded-[15px] border-blue-500 outline-none px-[25px] h-[50px]"
               />
             </div>
-            <div className="w-full flex flex-col gap-[15px]">
-              <p className="text-[20px] font-bold">Last name:</p>
+            <div className="w-full flex flex-col xl:gap-[15px] gap-[5px]">
+              <p className="xl:text-[20px] md:text-[16px]  font-bold">Last name:</p>
               <input
                 onChange={(e) =>
                   setFormData({ ...formData, lname: e.target.value })
@@ -82,8 +82,8 @@ export default function Signup() {
                 className="w-full border-2 rounded-[15px] border-blue-500 outline-none px-[25px] h-[50px]"
               />
             </div>
-            <div className="w-full flex flex-col gap-[15px]">
-              <p className="text-[20px] font-bold">Email:</p>
+            <div className="w-full flex flex-col xl:gap-[15px] gap-[5px]">
+              <p className="xl:text-[20px] md:text-[16px]  font-bold">Email:</p>
               <input
                 onChange={(e) =>
                   setFormData({ ...formData, email: e.target.value })
@@ -93,8 +93,8 @@ export default function Signup() {
                 className="w-full border-2 rounded-[15px] border-blue-500 outline-none px-[25px] h-[50px]"
               />
             </div>
-            <div className="w-full flex flex-col gap-[15px]">
-              <p className="text-[20px] font-bold">Password:</p>
+            <div className="w-full flex flex-col xl:gap-[15px] gap-[5px]">
+              <p className="xl:text-[20px] md:text-[16px]  font-bold">Password:</p>
               <input
                 onChange={(e) =>
                   setFormData({ ...formData, pwd: e.target.value })
@@ -106,7 +106,7 @@ export default function Signup() {
             </div>
             <button
               type="submit"
-              className="text-[20px] bg-blue-500 text-white px-[50px] py-[10px] rounded-full w-fit cursor-pointer"
+              className="xl:text-[20px] md:text-[16px]  bg-blue-500 text-white px-[50px] py-[10px] rounded-full w-fit cursor-pointer"
             >
               Signup
             </button>
