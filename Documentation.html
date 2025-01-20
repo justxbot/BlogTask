@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BlogTask API Documentation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #eee;
+        }
+
+        h2 {
+            color: #34495e;
+            margin: 30px 0 15px;
+        }
+
+        h3 {
+            color: #2980b9;
+            margin: 20px 0 10px;
+        }
+
+        .endpoint {
+            background: #f8f9fa;
+            border-radius: 5px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid #3498db;
+        }
+
+        .method {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .get { background: #dff0d8; color: #3c763d; }
+        .post { background: #d9edf7; color: #31708f; }
+        .delete { background: #f2dede; color: #a94442; }
+
+        code {
+            background: #f4f4f4;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        pre {
+            background: #f4f4f4;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+
+        .response {
+            margin-top: 10px;
+            padding: 10px;
+            background: #fafafa;
+            border-radius: 4px;
+        }
+
+        .auth-note {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 10px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Blog API Documentation</h1>
+    
+    <h2>Base URL</h2>
+    <p>All endpoints are relative to: <code>https://blogtask-api.onrender.com</code></p>
+
+    <h2>Authentication</h2>
+    <div class="auth-note">
+        <p>Most endpoints require authentication via JWT token stored in an HTTP-only cookie named 'authToken'.</p>
+    </div>
+
+    <h2>User Endpoints</h2>
+
+    <div class="endpoint">
+        <span class="method post">POST</span>
+        <code>/signup</code>
+        <h3>Create new user account</h3>
+        <p>Request body:</p>
+        <pre>
+{
+    "fname": "string",
+    "lname": "string",
+    "email": "string",
+    "pwd": "string"
+}
+        </pre>
+        <div class="response">
+            <p>Success Response (200):</p>
+            <pre>
+{
+    "message": "Account created successfully"
+}
+            </pre>
+        </div>
+    </div>
+
+    <div class="endpoint">
+        <span class="method post">POST</span>
+        <code>/login</code>
+        <h3>User login</h3>
+        <p>Request body:</p>
+        <pre>
+{
+    "email": "string",
+    "pwd": "string"
+}
+        </pre>
+        <div class="response">
+            <p>Success Response (200):</p>
+            <pre>
+{
+    "message": "logged in successfully",
+    "user": {
+        // user object
+    }
+}
+            </pre>
+        </div>
+    </div>
+
+    <div class="endpoint">
+        <span class="method get">GET</span>
+        <code>/checkUser</code>
+        <h3>Check user authentication status</h3>
+        <div class="response">
+            <p>Success Response (200):</p>
+            <pre>
+{
+    "status": boolean,
+    "user": {
+        // user object (if authenticated)
+    }
+}
+            </pre>
+        </div>
+    </div>
+
+    <div class="endpoint">
+        <span class="method post">POST</span>
+        <code>/logout</code>
+        <h3>User logout</h3>
+        <div class="response">
+            <p>Success Response (200):</p>
+            <pre>
+{
+    "message": "Logged out successfully"
+}
+            </pre>
+        </div>
+    </div>
+
+    <h2>Blog Endpoints</h2>
+
+    <div class="endpoint">
+        <span class="method get">GET</span>
+        <code>/blogs</code>
+        <h3>Get all blogs</h3>
+        <p>Requires authentication</p>
+        <div class="response">
+            <p>Success Response (200):</p>
+            <pre>
+{
+    "message": "blogs successfully loaded",
+    "blogs": [
+        // array of blog objects
+    ]
+}
+            </pre>
+        </div>
+    </div>
+
+    <div class="endpoint">
+        <span class="method get">GET</span>
+        <code>/blogs/:id</code>
+        <h3>Get single blog by ID</h3>
+        <p>Requires authentication</p>
+        <div class="response">
+            <p>Success Response (200):</p>
+            <pre>
+{
+    "message": "blogs successfully loaded",
+    "blog": {
+        // blog object
+    }
+}
+            </pre>
+        </div>
+    </div>
+
+    <div class="endpoint">
+        <span class="method get">GET</span>
+        <code>/myblogs</code>
+        <h3>Get current user's blogs</h3>
+        <p>Requires authentication</p>
+        <div class="response">
+            <p>Success Response (200):</p>
+            <pre>
+{
+    "message": "blogs successfully loaded",
+    "userBlogs": [
+        // array of user's blog objects
+    ]
+}
+            </pre>
+        </div>
+    </div>
+
+    <div class="endpoint">
+        <span class="method post">POST</span>
+        <code>/blog</code>
+        <h3>Create new blog post</h3>
+        <p>Requires authentication</p>
+        <p>Request body (multipart/form-data):</p>
+        <pre>
+{
+    "title": "string",
+    "data": "JSON string of blog content",
+    "featuredImage": "file"
+}
+        </pre>
+        <div class="response">
+            <p>Success Response (200):</p>
+            <pre>
+{
+    "message": "Blog created successfully"
+}
+            </pre>
+        </div>
+    </div>
+
+    <div class="endpoint">
+        <span class="method post">POST</span>
+        <code>/blog/edit</code>
+        <h3>Edit existing blog post</h3>
+        <p>Requires authentication</p>
+        <p>Request body (multipart/form-data):</p>
+        <pre>
+{
+    "_id": "string",
+    "title": "string",
+    "data": "JSON string of blog content",
+    "featuredImage": "file (optional)"
+}
+        </pre>
+        <div class="response">
+            <p>Success Response (200):</p>
+            <pre>
+{
+    "message": "Blog edited successfully"
+}
+            </pre>
+        </div>
+    </div>
+
+    <div class="endpoint">
+        <span class="method post">POST</span>
+        <code>/blog/delete</code>
+        <h3>Delete blog post</h3>
+        <p>Requires authentication</p>
+        <p>Request body:</p>
+        <pre>
+{
+    "blogId": "string"
+}
+        </pre>
+        <div class="response">
+            <p>Success Response (200):</p>
+            <pre>
+{
+    "message": "Blog post deleted successfully"
+}
+            </pre>
+        </div>
+    </div>
+
+    <h2>Error Responses</h2>
+    <p>All endpoints may return the following error status codes:</p>
+    <ul>
+        <li><code>400</code> - Bad Request</li>
+        <li><code>401</code> - Unauthorized</li>
+        <li><code>404</code> - Not Found</li>
+        <li><code>500</code> - Internal Server Error</li>
+    </ul>
+
+    <h2>Media Handling</h2>
+    <p>Media files are stored in the <code>/media</code> directory and are served statically. The API handles file uploads using multer for both blog content images and featured images.</p>
+    <h2>Preview</h2>
+    <p>Preview the app at: <code>https://blogtask.oualil.pro</code></p>
+</body>
+</html>
