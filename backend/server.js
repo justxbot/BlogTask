@@ -17,6 +17,7 @@ const User = require('./models/User.js')
 const Blog = require('./models/Blog.js')
 
 //enviroment variables
+const PORT = process.env.PORT
 const JWT_KEY = process.env.JWT_KEY
 
 //applying Middlewares
@@ -355,6 +356,6 @@ app.post('/blog/delete',isAuth,async(req,res)=>{
     }
 })
 
-app.listen(3000,()=>{
+app.listen(PORT,()=>{
     console.log("app running");
 })
