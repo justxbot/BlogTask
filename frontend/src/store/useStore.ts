@@ -61,10 +61,9 @@ const useStore = create((set)=>({
     signup: async(payload:object)=>{
         try{
             const res = await axios.post(endpointUrl+'/signup',payload,{withCredentials:true})
-            console.log("res",res);
-            
             if(res){
                 toast.success(res.data.message)
+                return true
             }
         }catch(err:any){
 

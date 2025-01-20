@@ -1,9 +1,10 @@
 import { FormEvent, useState } from "react";
 import { toast } from "react-toastify";
 import { isEmail } from "../utilities/isEmail";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import signupIllustration from "../assets/signupIllustration.svg"
 import useStore from "../store/useStore";
+import { BallSpinner } from "react-spinners-kit";
 
 export default function Signup() {
   interface formData {
@@ -12,7 +13,9 @@ export default function Signup() {
     email: string;
     pwd: string;
   }
+  const [requestLoading,setRequestLoading] = useState<boolean>(false)
   const signup = useStore((state:any)=>state.signup)
+  const navigate = useNavigate()
   const [formData, setFormData] = useState<formData>({ fname:"",lname:"",email: "", pwd: "" });
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -33,7 +36,12 @@ export default function Signup() {
       toast.error("Password can not be empty");
     }
     else {
-       await signup(formData)
+      setRequestLoading(true)
+       const res = await signup(formData)
+       if(res){
+         navigate('/login')
+       }
+       setRequestLoading(false)
     }
   };
 
@@ -104,12 +112,7 @@ export default function Signup() {
                 className="w-full border-2 rounded-[15px] border-blue-500 outline-none px-[25px] h-[50px]"
               />
             </div>
-            <button
-              type="submit"
-              className="xl:text-[20px] md:text-[16px]  bg-blue-500 text-white px-[50px] py-[10px] rounded-full w-fit cursor-pointer"
-            >
-              Signup
-            </button>
+            <button type={requestLoading ? "button":"submit"} className={`text-[20px] ${!requestLoading && "bg-blue-500"} text-white px-[50px] py-[10px] rounded-full w-fit cursor-pointer`}>{requestLoading ? <BallSpinner color="#3b82f6" />:"Signup"}</button>
           </form>
         </div>
       </div>

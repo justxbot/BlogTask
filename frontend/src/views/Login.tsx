@@ -4,6 +4,7 @@ import { toast } from 'react-toastify'
 import { isEmail } from '../utilities/isEmail'
 import useStore from '../store/useStore'
 import { Link } from 'react-router-dom'
+import { BallSpinner } from 'react-spinners-kit'
 
 
 export default function Login() {
@@ -13,7 +14,7 @@ export default function Login() {
         pwd:string
     }
     const authenticate = useStore((state:any)=>state.authenticate)
-
+    const [requestLoading,setRequestLoading] = useState<boolean>(false)
     const [formData, setFormData] = useState<formData>({email:'',pwd:''})
     const handleSubmit = async(e:React.FormEvent)=>{
         e.preventDefault()
@@ -28,7 +29,9 @@ export default function Login() {
             toast.error("Password can not be empty")
         }
         else{
+            setRequestLoading(true)
             await authenticate(formData)
+            setRequestLoading(false)
         }
     }
 
@@ -59,7 +62,9 @@ export default function Login() {
                             <p className='xl:text-[20px] md:text-[16px]  font-bold'>Password:</p>
                             <input onChange={(e)=>setFormData({...formData,pwd:e.target.value})} type="password" placeholder='Password' className='w-full border-2 rounded-[15px] border-blue-500 outline-none px-[25px] h-[50px]' />
                         </div>
-                        <button type='submit' className='text-[20px] bg-blue-500 text-white px-[50px] py-[10px] rounded-full w-fit cursor-pointer'>Login</button>
+                        
+                        <button type={requestLoading ? "button":"submit"} className={`text-[20px] ${!requestLoading && "bg-blue-500"} text-white px-[50px] py-[10px] rounded-full w-fit cursor-pointer`}>{requestLoading ? <BallSpinner color="#3b82f6" />:"Login"}</button>
+                      
                     </form>
                 </div>
             </div>

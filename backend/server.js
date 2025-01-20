@@ -120,7 +120,7 @@ app.get('/checkUser',(req,res)=>{
         }
     }
     catch(err){
-        return res.status(403).json({message:'Invalid login information'})
+        console.log(err);
     }
 })
 //user logout
