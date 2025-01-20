@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { Outlet, useNavigate } from 'react-router-dom'
+import {  useNavigate } from 'react-router-dom'
 import useStore from '../store/useStore'
 
-export default function PublicOnly({children}) {
+export default function PublicOnly({children}:any) {
     const navigate = useNavigate()
     const checkUser = useStore((state:any)=>state.checkUser)
     const [loadingContent,setLoadingContent] = useState<boolean>(true)

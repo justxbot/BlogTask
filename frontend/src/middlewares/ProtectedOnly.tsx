@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react'
-import { Outlet, useNavigate } from 'react-router-dom'
+import  { useEffect, useState } from 'react'
+import {  useNavigate } from 'react-router-dom'
 import useStore from '../store/useStore'
 
-export default function ProtectedOnly({children}) {
+export default function ProtectedOnly({children}:any) {
     const navigate = useNavigate()
     const checkUser = useStore((state:any)=>state.checkUser)
     const [loadingContent,setLoadingContent] = useState<boolean>(true)
